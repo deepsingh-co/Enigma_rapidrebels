@@ -17,7 +17,13 @@ class TwilioCommunicationService:
         self.auth_token = os.getenv("TWILIO_AUTH_TOKEN")
         self.from_phone = os.getenv("TWILIO_PHONE_NUMBER", "+15005550006")
         self.from_whatsapp = os.getenv("TWILIO_WHATSAPP_NUMBER", "+14155238886")
-        
+
+        # Trial accounts reject free-text SMS bodies and inline TwiML voice calls.
+        # A predefined template body name (SMS) or a hosted TwiML URL (Voice) is
+        # required instead. Both are opt-in via env so paid accounts are unaffected.
+        self.sms_template = os.getenv("TWILIO_SMS_TEMPLATE", "").strip()
+        self.voice_url = os.getenv("TWILIO_VOICE_URL", "").strip()
+
         self.is_live_ready = bool(
             self.account_sid and 
             self.auth_token and 
@@ -34,6 +40,47 @@ class TwilioCommunicationService:
             except Exception as e:
                 print(f"[Twilio Warning] Could not initialize Twilio client ({e}). Operating in simulation mode.")
                 self.is_live_ready = False
+
+    @staticmethod
+    def _extract_twilio_error(e: Exception) -> Dict[str, Any]:
+        """Pulls the HTTP status and Twilio error code/message off a REST exception."""
+        status = getattr(e, "status_code", None) or getattr(e, "code", None)
+        code = getattr(e, "code", None)
+        message = str(e)
+        # Twilio's RestException exposes .code (twilio error code) and .status
+        if status is None:
+            status = getattr(getattr(e, "uri", None), "status", None)
+        return {
+            "http_status": status,
+            "error_code": code,
+            "error_message": message.strip().splitlines()[0] if message.strip() else "Unknown Twilio error",
+        }
+
+    def _live_failure(self, channel: str, target: str, e: Exception, notification_type: str) -> Dict[str, Any]:
+        """
+        Build an honest failure receipt for a live dispatch that Twilio rejected.
+
+        Previously this path silently fell through to a fabricated
+        `delivered_simulation` receipt, so real send failures were reported to the
+        UI as successes. Live failures now surface the actual Twilio error.
+        """
+        details = self._extract_twilio_error(e)
+        print(f"[Twilio Error] {channel} dispatch to {target} failed: {details['error_message']}")
+        return {
+            "success": False,
+            "channel": channel,
+            "sid": None,
+            "status": "failed",
+            "to": target,
+            "from": self.from_phone,
+            "notification_type": notification_type,
+            "mode": "live",
+            "error": details["error_message"],
+            "error_code": details["error_code"],
+            "http_status": details["http_status"],
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "note": "Live Twilio dispatch was rejected. No message was sent.",
+        }
 
     @classmethod
     def get_instance(cls) -> "TwilioCommunicationService":
@@ -88,9 +135,12 @@ class TwilioCommunicationService:
         timestamp = datetime.now(timezone.utc).isoformat()
 
         if self.is_live_ready and self._twilio_client:
+            # Trial accounts only accept predefined template names as the body.
+            # Paid accounts send the real message text.
+            body = self.sms_template or message_body
             try:
                 message = self._twilio_client.messages.create(
-                    body=message_body,
+                    body=body,
                     from_=self.from_phone,
                     to=target_phone
                 )
@@ -101,15 +151,16 @@ class TwilioCommunicationService:
                     "status": message.status,
                     "to": target_phone,
                     "from": self.from_phone,
-                    "body": message_body,
+                    "body": body,
                     "notification_type": notification_type,
                     "timestamp": timestamp,
-                    "mode": "live"
+                    "mode": "live",
+                    "used_template": bool(self.sms_template)
                 }
             except Exception as e:
-                print(f"[Twilio Error] SMS dispatch failed: {e}")
+                return self._live_failure("SMS", target_phone, e, notification_type)
 
-        # Simulated delivery for development / test environments
+        # Simulated delivery for development / test environments (no credentials configured)
         simulated_sid = f"SM_sim_{uuid.uuid4().hex[:16]}"
         return {
             "success": True,
@@ -162,7 +213,7 @@ class TwilioCommunicationService:
                     "mode": "live"
                 }
             except Exception as e:
-                print(f"[Twilio Error] WhatsApp dispatch failed: {e}")
+                return self._live_failure("WhatsApp", whatsapp_to, e, notification_type)
 
         simulated_sid = f"WA_sim_{uuid.uuid4().hex[:16]}"
         return {
@@ -201,11 +252,20 @@ class TwilioCommunicationService:
 
         if self.is_live_ready and self._twilio_client:
             try:
-                call = self._twilio_client.calls.create(
-                    twiml=twiml_payload,
-                    to=target_phone,
-                    from_=self.from_phone
-                )
+                # Trial accounts reject inline `twiml=`. A hosted TwiML URL works on
+                # trial; a paid account can use the inline payload for custom speech.
+                if self.voice_url:
+                    call = self._twilio_client.calls.create(
+                        url=self.voice_url,
+                        to=target_phone,
+                        from_=self.from_phone
+                    )
+                else:
+                    call = self._twilio_client.calls.create(
+                        twiml=twiml_payload,
+                        to=target_phone,
+                        from_=self.from_phone
+                    )
                 return {
                     "success": True,
                     "channel": "Voice Call",
@@ -216,10 +276,11 @@ class TwilioCommunicationService:
                     "spoken_script": spoken_message,
                     "notification_type": notification_type,
                     "timestamp": timestamp,
-                    "mode": "live"
+                    "mode": "live",
+                    "used_hosted_twiml": bool(self.voice_url)
                 }
             except Exception as e:
-                print(f"[Twilio Error] Voice call initiation failed: {e}")
+                return self._live_failure("Voice Call", target_phone, e, notification_type)
 
         simulated_sid = f"CA_sim_{uuid.uuid4().hex[:16]}"
         return {
@@ -235,4 +296,18 @@ class TwilioCommunicationService:
             "timestamp": timestamp,
             "mode": "simulation",
             "note": "Automated voice call simulated with Amazon Polly TTS Indian English voice."
+        }
+        return {
+            "success": True,
+            "channel": "Voice Call",
+            "sid": simulated_sid,
+            "status": "call_queued_simulation",
+            "to": target_phone,
+            "from": self.from_phone,
+            "spoken_script": spoken_message,
+            "twiml": twiml_payload,
+            "notification_type": notification_type,
+            "timestamp": timestamp,
+            "mode": "simulation",
+            "note": "Voice call simulated successfully."
         }

@@ -6,67 +6,70 @@ export default function Navbar() {
   const { user, logout } = useAuth();
 
   return (
-    <header className="fixed top-0 inset-x-0 z-50 transition-all duration-300">
-      <div className="absolute inset-0 glass"></div>
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="flex h-16 items-center justify-between">
-          <div className="flex items-center gap-10">
-            <Link to="/" className="flex shrink-0 items-center gap-2 text-xl font-extrabold tracking-tight text-gray-900">
-              <div className="bg-accent/10 p-1.5 rounded-lg text-accent mr-1">
-                <Leaf className="w-5 h-5" />
+    <header className="sticky top-0 z-50">
+      <nav className="sticky top-0 z-50 border-b border-gray-800 bg-primary/80 backdrop-blur-md transition-colors">
+        <div className="box-border mx-auto w-[1300px] max-w-full px-5 lg:px-16 border-x border-gray-800 border-dashed">
+          <div className="flex h-14 items-center justify-between">
+            <div className="flex min-w-0 gap-8 items-center">
+              <Link to="/" className="flex shrink-0 items-center gap-2.5 text-lg font-semibold text-textmain">
+                <img src="/logo.jpg" alt="WasteX Logo" className="w-7 h-7 rounded" />
+                WasteX
+              </Link>
+              <div className="hidden min-w-0 flex-nowrap items-center gap-5 overflow-x-auto md:mr-6 md:flex">
+                <Link to="/" className="shrink-0 text-sm text-textmuted transition-colors hover:text-textmain font-mono uppercase tracking-wider">Home</Link>
+                <Link to="/symbiosis" className="shrink-0 text-sm text-accent transition-colors hover:text-orange-400 font-mono uppercase tracking-wider flex items-center gap-1.5 font-bold">
+                  <Sparkles className="w-3.5 h-3.5" />
+                  Symbiosis AI
+                </Link>
+                <a href="/#marketplace" className="shrink-0 text-sm text-textmuted transition-colors hover:text-textmain font-mono uppercase tracking-wider">Marketplace</a>
+                <a href="/#process" className="shrink-0 text-sm text-textmuted transition-colors hover:text-textmain font-mono uppercase tracking-wider">Process</a>
+                <a href="/#benefits" className="shrink-0 text-sm text-textmuted transition-colors hover:text-textmain font-mono uppercase tracking-wider">Benefits</a>
               </div>
-              WasteX
-            </Link>
-            <div className="hidden md:flex items-center gap-8">
-              <Link to="/" className="text-[13px] font-semibold text-slate-500 hover:text-slate-900 transition-colors uppercase tracking-widest">Home</Link>
-              <Link to="/symbiosis" className="text-[13px] font-semibold text-accent hover:text-teal-900 transition-colors flex items-center gap-1.5 uppercase tracking-widest">
-                <Sparkles className="w-4 h-4" />
-                Symbiosis AI
-              </Link>
-              <a href="/#marketplace" className="text-[13px] font-semibold text-slate-500 hover:text-slate-900 transition-colors uppercase tracking-widest">Marketplace</a>
-              <a href="/#process" className="text-[13px] font-semibold text-slate-500 hover:text-slate-900 transition-colors uppercase tracking-widest">Process</a>
             </div>
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="hidden md:flex items-center gap-4">
-              <Link to="/create" className="text-sm font-semibold text-white bg-accent px-5 py-2.5 rounded-full hover:bg-teal-700 transition-all shadow-sm hover:shadow hover:-translate-y-0.5">
-                List Waste
-              </Link>
-              
-              {user && (
-                <Link to="/nearby-buyers" className="text-sm font-semibold text-slate-700 bg-slate-100 px-5 py-2.5 rounded-full hover:bg-slate-200 transition-all">
-                  Nearby Buyers
+            <div className="flex items-center gap-3">
+              <div className="hidden items-center gap-3 md:flex">
+                <Link to="/symbiosis" className="relative inline-flex shrink-0 items-center justify-center rounded-sm border border-purple-500/40 bg-purple-500/10 text-purple-300 font-medium whitespace-nowrap transition-all hover:bg-purple-500/20 h-8 gap-1.5 px-3 text-xs font-mono">
+                  <Sparkles className="w-3 h-3 text-purple-400" />
+                  Discover Symbiosis
                 </Link>
-              )}
-              
-              {user ? (
-                <div className="flex items-center gap-4 ml-2 pl-4 border-l border-slate-200">
-                  <div className="flex items-center gap-2">
-                    {user.photoURL ? (
-                      <img src={user.photoURL} alt="Profile" className="w-8 h-8 rounded-full border border-slate-200 shadow-sm" />
-                    ) : (
-                      <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200 shadow-sm">
-                        <UserIcon className="w-4 h-4 text-slate-500" />
-                      </div>
-                    )}
+
+                <Link to="/create" className="relative inline-flex shrink-0 items-center justify-center rounded-sm border border-transparent bg-accent text-primary font-medium whitespace-nowrap transition-all outline-none select-none hover:bg-orange-500 h-8 gap-1.5 px-3 text-sm">
+                  List Waste
+                </Link>
+                
+                {user && (
+                  <Link to="/nearby-buyers" className="relative inline-flex shrink-0 items-center justify-center rounded-sm border border-gray-700 bg-secondary text-textmain font-medium whitespace-nowrap transition-all hover:bg-gray-800 h-8 px-3 text-sm">
+                    Nearby Buyers
+                  </Link>
+                )}
+                
+                {user ? (
+                  <div className="flex items-center gap-4 ml-4 pl-4 border-l border-gray-800">
+                    <div className="flex items-center gap-2">
+                      {user.photoURL ? (
+                        <img src={user.photoURL} alt="Profile" className="w-6 h-6 rounded-full" />
+                      ) : (
+                        <UserIcon className="w-5 h-5 text-textmuted" />
+                      )}
+                      <span className="text-sm font-mono text-textmain">{user.displayName || user.email}</span>
+                    </div>
+                    <button onClick={logout} className="text-textmuted hover:text-red-400 transition-colors" title="Sign out">
+                      <LogOut className="w-4 h-4" />
+                    </button>
                   </div>
-                  <button onClick={logout} className="text-slate-400 hover:text-rose-500 transition-colors p-1" title="Sign out">
-                    <LogOut className="w-5 h-5" />
-                  </button>
-                </div>
-              ) : (
-                <Link to="/login" className="text-sm font-semibold text-slate-700 bg-slate-100 px-5 py-2.5 rounded-full hover:bg-slate-200 transition-all ml-2">
-                  Sign in
-                </Link>
-              )}
+                ) : (
+                  <Link to="/login" className="ml-2 relative inline-flex shrink-0 items-center justify-center rounded-sm border border-gray-700 bg-secondary text-textmain font-medium whitespace-nowrap transition-all hover:bg-gray-800 h-8 px-3 text-sm">
+                    Sign in
+                  </Link>
+                )}
+              </div>
+              <button className="md:hidden text-textmain">
+                <Menu className="w-5 h-5" />
+              </button>
             </div>
-            <button className="md:hidden text-slate-600 p-2">
-              <Menu className="w-6 h-6" />
-            </button>
           </div>
         </div>
       </nav>
     </header>
   );
 }
-

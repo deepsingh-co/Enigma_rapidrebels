@@ -27,9 +27,105 @@ import {
   AlertTriangle,
   Info,
   Check,
-  X
+  X,
+  AlertCircle
 } from "lucide-react";
 import SymbiosisNetworkGraph from "../components/SymbiosisNetworkGraph";
+
+// Benchmark scenarios for the quick-preset pills. Each `data` object mirrors the
+// shape of the workbench form state so it can be applied without translation.
+const presets = [
+  {
+    label: "Fly Ash (Thermal Power)",
+    prompt: "We generate 5000 kg of dry fly ash every month with 8% moisture in Mumbai.",
+    data: {
+      material: "Fly Ash",
+      quantity: 5000,
+      quantity_unit: "kg",
+      frequency: "monthly",
+      form: "powder",
+      condition: "dry",
+      location: "Mumbai, Maharashtra",
+      producer_name: "Tata Thermal Power Plant",
+      producer_industry: "Thermal Power & Energy"
+    }
+  },
+  {
+    label: "Blast Furnace Slag (Metal)",
+    prompt: "Our steel plant in Bhilai produces 12000 tonnes of granulated blast furnace slag every month as a dry granular solid.",
+    data: {
+      material: "Blast Furnace Slag",
+      quantity: 12000,
+      quantity_unit: "kg",
+      frequency: "monthly",
+      form: "granular",
+      condition: "dry",
+      location: "Bhilai, Chhattisgarh",
+      producer_name: "Bhilai Steel Integrated Plant",
+      producer_industry: "Metal & Foundry"
+    }
+  },
+  {
+    label: "Cotton Waste (Textile)",
+    prompt: "Our spinning mill in Ludhiana generates 2000 kg of cotton linter and cotton scraps each month, clean and dry.",
+    data: {
+      material: "Cotton Waste",
+      quantity: 2000,
+      quantity_unit: "kg",
+      frequency: "monthly",
+      form: "fiber",
+      condition: "dry",
+      location: "Ludhiana, Punjab",
+      producer_name: "Ludhiana Cotton Spinning Unit",
+      producer_industry: "Textile & Apparel"
+    }
+  },
+  {
+    label: "Plastic Regrind (Packaging)",
+    prompt: "We collect 3500 kg of clean HDPE plastic regrind from packaging lines in Ahmedabad every month.",
+    data: {
+      material: "Plastic Regrind",
+      quantity: 3500,
+      quantity_unit: "kg",
+      frequency: "monthly",
+      form: "granular",
+      condition: "dry",
+      location: "Ahmedabad, Gujarat",
+      producer_name: "Ahmedabad Packaging Converters",
+      producer_industry: "Plastic & Packaging"
+    }
+  },
+  {
+    label: "Bagasse (Agro Processing)",
+    prompt: "Our sugarcane mill near Hyderabad produces 25000 kg of bagasse every month as a dry fibrous residue.",
+    data: {
+      material: "Bagasse",
+      quantity: 25000,
+      quantity_unit: "kg",
+      frequency: "monthly",
+      form: "fibrous",
+      condition: "dry",
+      location: "Hyderabad, Telangana",
+      producer_name: "Telangana Sugarcane Mills",
+      producer_industry: "Food Processing"
+    }
+  },
+  {
+    label: "Concrete Rubble (Construction)",
+    prompt: "We demolish structures in Bengaluru and recover about 8000 kg of clean concrete rubble monthly.",
+    data: {
+      material: "Concrete Rubble",
+      quantity: 8000,
+      quantity_unit: "kg",
+      frequency: "monthly",
+      form: "chunky",
+      condition: "dry",
+      location: "Bengaluru, Karnataka",
+      producer_name: "Bengaluru Demolition & Salvage",
+      producer_industry: "Construction & Demolition"
+    }
+  }
+];
 
 export default function SymbiosisDiscovery() {
   const [searchParams] = useSearchParams();
@@ -199,6 +295,24 @@ export default function SymbiosisDiscovery() {
     if (selectedIndustryFilter === "All") return true;
     return p.industry.industry_type.toLowerCase().includes(selectedIndustryFilter.toLowerCase());
   }) || [];
+
+  // Derive the filter pills from whichever industries the current run discovered,
+  // so the pills always reflect real results instead of a hardcoded list.
+  const industryFilters = [
+    "All",
+    ...new Set(
+      (analysisResult?.potentialPartners || [])
+        .map((p) => p.industry?.industry_type)
+        .filter(Boolean)
+    )
+  ];
+
+  // Keep the selection valid if a re-analysis no longer returns that industry.
+  useEffect(() => {
+    if (!industryFilters.includes(selectedIndustryFilter)) {
+      setSelectedIndustryFilter("All");
+    }
+  }, [analysisResult]);
 
   return (
     <div className="bg-primary text-textmain min-h-screen font-sans pb-28">
@@ -527,16 +641,36 @@ export default function SymbiosisDiscovery() {
 
             {twilioModal.receipt ? (
               <div className="space-y-4 my-4 animate-fade-in">
-                <div className="p-4 bg-green-500/10 border border-green-500/30 rounded-xl text-center">
-                  <CheckCircle className="w-10 h-10 text-green-500 mx-auto mb-2" />
-                  <h4 className="text-base font-bold text-white">Twilio {twilioModal.receipt.channel} Dispatched!</h4>
-                  <p className="text-xs text-textmuted mt-0.5">SID: {twilioModal.receipt.sid}</p>
-                  <span className="inline-block mt-2 text-[10px] font-mono px-2 py-0.5 rounded bg-green-500/20 text-green-400 font-bold uppercase">
-                    Status: {twilioModal.receipt.status}
-                  </span>
+                <div className={`p-4 border rounded-xl text-center ${
+                  twilioModal.receipt.success
+                    ? "bg-green-500/10 border-green-500/30"
+                    : "bg-red-500/10 border-red-500/30"
+                }`}>
+                  {twilioModal.receipt.success ? (
+                    <>
+                      <CheckCircle className="w-10 h-10 text-green-500 mx-auto mb-2" />
+                      <h4 className="text-base font-bold text-white">Twilio {twilioModal.receipt.channel} Dispatched!</h4>
+                      <p className="text-xs text-textmuted mt-0.5">SID: {twilioModal.receipt.sid}</p>
+                      <span className="inline-block mt-2 text-[10px] font-mono px-2 py-0.5 rounded bg-green-500/20 text-green-400 font-bold uppercase">
+                        Status: {twilioModal.receipt.status}
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <AlertCircle className="w-10 h-10 text-red-500 mx-auto mb-2" />
+                      <h4 className="text-base font-bold text-white">Twilio {twilioModal.receipt.channel} Dispatch Failed</h4>
+                      <p className="text-xs text-red-400 mt-1 break-words">
+                        {twilioModal.receipt.error || "Twilio rejected the request."}
+                      </p>
+                      <span className="inline-block mt-2 text-[10px] font-mono px-2 py-0.5 rounded bg-red-500/20 text-red-400 font-bold uppercase">
+                        Status: {twilioModal.receipt.status}
+                      </span>
+                    </>
+                  )}
                 </div>
                 <div className="p-3 bg-primary rounded-xl border border-gray-800 text-xs text-textmuted space-y-1">
                   <div className="flex justify-between"><span>Recipient:</span><span className="text-white font-mono">{twilioModal.receipt.to}</span></div>
+                  <div className="flex justify-between"><span>Mode:</span><span className="text-white font-mono">{twilioModal.receipt.mode}</span></div>
                   <div className="flex justify-between"><span>Timestamp:</span><span className="text-white font-mono">{twilioModal.receipt.timestamp}</span></div>
                   {twilioModal.receipt.note && <p className="text-[11px] text-accent pt-1 italic">{twilioModal.receipt.note}</p>}
                 </div>

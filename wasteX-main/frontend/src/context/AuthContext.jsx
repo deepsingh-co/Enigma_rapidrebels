@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { auth, googleProvider, signInWithPopup, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "../firebase";
+import { auth, googleProvider, signInWithPopup, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, isFirebaseConfigured } from "../firebase";
 import { updateProfile } from "firebase/auth";
 import axios from "axios";
 
@@ -10,6 +10,12 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Firebase auth is optional; without credentials we simply stay logged out.
+    if (!isFirebaseConfigured || !auth) {
+      setLoading(false);
+      return undefined;
+    }
+
     const unsubscribe = auth.onAuthStateChanged(async (firebaseUser) => {
       if (firebaseUser) {
         try {
@@ -33,9 +39,16 @@ export function AuthProvider({ children }) {
     return unsubscribe;
   }, []);
 
+  const requireAuth = () => {
+    if (!auth) {
+      throw new Error("Authentication is disabled: Firebase credentials are not configured.");
+    }
+    return auth;
+  };
+
   const loginWithGoogle = async () => {
     try {
-      await signInWithPopup(auth, googleProvider);
+      await signInWithPopup(requireAuth(), googleProvider);
     } catch (error) {
       console.error("Login failed:", error);
       alert(`Login failed: ${error.message}\nMake sure your server is restarted if you just updated .env!`);
@@ -44,7 +57,7 @@ export function AuthProvider({ children }) {
 
   const loginWithEmail = async (email, password) => {
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      await signInWithEmailAndPassword(requireAuth(), email, password);
     } catch (error) {
       console.error("Login failed:", error);
       throw error;
@@ -53,7 +66,7 @@ export function AuthProvider({ children }) {
 
   const signupWithEmail = async (email, password, company_name) => {
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(requireAuth(), email, password);
       await updateProfile(userCredential.user, { displayName: company_name });
       // To trigger a re-render/re-sync with the updated name
       setUser({ ...userCredential.user, displayName: company_name });
@@ -72,11 +85,11 @@ export function AuthProvider({ children }) {
   };
 
   const logout = async () => {
-    await signOut(auth);
+    if (auth) await signOut(auth);
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, loginWithGoogle, loginWithEmail, signupWithEmail, logout }}>
+    <AuthContext.Provider value={{ user, loading, authEnabled: isFirebaseConfigured, loginWithGoogle, loginWithEmail, signupWithEmail, logout }}>
       {!loading && children}
     </AuthContext.Provider>
   );

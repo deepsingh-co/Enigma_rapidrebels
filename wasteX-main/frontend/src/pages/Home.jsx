@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Package, RefreshCw, Box, Recycle, Leaf, Search, TrendingUp, ShieldCheck } from "lucide-react";
+import { ArrowRight, Package, RefreshCw, Box, Recycle, Leaf } from "lucide-react";
 import axios from "axios";
 
 export default function Home() {
@@ -65,150 +65,149 @@ export default function Home() {
   };
 
   return (
-    <div className="bg-[#f8fafc] min-h-screen font-sans selection:bg-teal-100 selection:text-teal-900 pt-16">
-      <main className="relative overflow-hidden">
-        {/* Background Decorative Gradients */}
-        <div className="absolute top-0 inset-x-0 h-[600px] bg-gradient-to-b from-teal-50/50 to-transparent -z-10 pointer-events-none"></div>
-        <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full bg-teal-400/10 blur-[100px] -z-10 pointer-events-none"></div>
-
-        {/* Hero Section */}
-        <section className="relative border-b border-slate-200/60 bg-dot-pattern">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-24 md:pt-28 md:pb-32">
-            <div className="grid items-center gap-16 lg:grid-cols-2">
-              <div className="animate-fade-up">
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-slate-200 shadow-sm text-sm font-semibold text-slate-700 mb-8 premium-shadow">
-                  <span className="flex w-2 h-2 rounded-full bg-accent animate-pulse"></span>
-                  India's premium B2B waste network
+    <div className="bg-primary text-textmain min-h-screen font-sans">
+      <main className="relative">
+        <section className="relative border-b border-gray-800">
+          <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-56 bg-[radial-gradient(ellipse_70%_100%_at_50%_0%,rgba(245,158,11,0.15)_9%,transparent)]"></div>
+          <div className="box-border mx-auto w-[1300px] max-w-full px-5 lg:px-16 border-x border-gray-800 border-dashed relative pb-12 pt-7 md:pb-16 md:pt-10">
+            <div className="grid items-center gap-6 lg:grid-cols-2 lg:gap-4 xl:grid-cols-[minmax(0,0.72fr)_minmax(0,1fr)]">
+              <div className="relative z-10 animate-fade-in">
+                <div className="flex flex-wrap items-center gap-3 font-mono text-xs uppercase tracking-wider text-textmuted">
+                  <span className="inline-flex items-center gap-2 rounded-md border border-gray-800 bg-secondary/50 py-1 pl-2.5 pr-1 font-medium text-textmain/80">
+                    India's largest B2B waste network
+                    <span className="rounded-[5px] border border-accent/35 bg-accent/10 px-2 py-0.5 font-semibold text-accent">for industries</span>
+                  </span>
                 </div>
                 
-                <h1 className="text-5xl md:text-6xl lg:text-[72px] font-extrabold text-slate-900 leading-[1.1] tracking-tight mb-8">
-                  Industrial <br className="hidden lg:block"/> 
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-emerald-500">Circularity.</span>
+                <h1 className="mt-6 max-w-4xl text-balance text-4xl font-bold leading-[110%] tracking-tight sm:text-6xl md:text-[64px] md:leading-[106%] lg:max-w-none lg:text-5xl xl:text-[64px]">
+                  <span className="relative inline-block">
+                    Industrial
+                    <span aria-hidden="true" className="absolute inset-x-[0.02em] -bottom-[0.08em] h-[0.15em] bg-[linear-gradient(180deg,#F59E0B_33.4%,#FDE68A_33.4%_66.7%,#10B981_66.7%)]"></span>
+                  </span>{" "}
+                  Circularity
                 </h1>
                 
-                <p className="text-xl text-slate-500 mb-10 max-w-xl leading-relaxed font-medium">
-                  A high-performance marketplace for industrial byproducts. Designed for modern enterprises to turn disposal costs into strategic revenue streams.
+                <div className="mt-6 max-w-xl">
+                  <div className="flex items-center gap-4">
+                    <span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.18em] text-textmuted">Connecting buyers and sellers</span>
+                    <span aria-hidden="true" className="h-px min-w-0 flex-1 bg-gray-800"></span>
+                  </div>
+                </div>
+                
+                <p className="mt-6 max-w-xl text-pretty text-base leading-relaxed text-textmain/80">
+                  A marketplace for industrial byproducts, run with the people who build a sustainable future. 
+                  Turn your disposal costs into new revenue streams by connecting with local buyers and recyclers.
                 </p>
                 
-                <div className="flex flex-wrap gap-4 mb-14">
-                  <Link to="/create" className="inline-flex items-center justify-center bg-accent hover:bg-teal-700 text-white font-semibold py-4 px-8 rounded-full transition-all premium-shadow hover:-translate-y-1 gap-2 text-lg">
-                    List your waste
-                    <ArrowRight className="w-5 h-5" />
-                  </Link>
-                  <a href="#marketplace" className="inline-flex items-center justify-center bg-white border border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-700 font-semibold py-4 px-8 rounded-full transition-all shadow-sm text-lg">
-                    Browse Marketplace
-                  </a>
-                </div>
-
-                <div className="flex items-center gap-12 border-t border-slate-200/60 pt-8">
-                  <div>
-                    <div className="flex items-center gap-2 text-slate-400 font-semibold text-xs tracking-widest uppercase mb-3">
-                      <Box className="w-4 h-4 text-accent" />
+                <dl className="mt-8 max-w-xl grid divide-y divide-gray-800 border-y border-gray-800 md:grid-cols-2 md:divide-x md:divide-y-0">
+                  <div className="py-4 md:py-5 md:pr-6">
+                    <dt className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.18em] text-textmuted">
+                      <span className="flex w-6 h-6 shrink-0 items-center justify-center rounded-md border border-accent/35 bg-accent/10 text-accent">
+                        <Box className="w-3.5 h-3.5" />
+                      </span>
                       Active Listings
-                    </div>
-                    <div className="text-4xl font-extrabold text-slate-900 tracking-tight">{listings.length > 0 ? listings.length : '0'}</div>
+                    </dt>
+                    <dd>
+                      <p className="mt-2.5 text-balance font-mono text-2xl font-semibold leading-[120%] tracking-tight text-accent">
+                        {listings.length > 0 ? listings.length : '0'}
+                      </p>
+                      <p className="mt-2.5 text-pretty text-[13px] leading-[165%] text-textmain/80">Materials currently available on the platform.</p>
+                    </dd>
                   </div>
-                  <div>
-                    <div className="flex items-center gap-2 text-slate-400 font-semibold text-xs tracking-widest uppercase mb-3">
-                      <Recycle className="w-4 h-4 text-emerald-500" />
+                  <div className="py-4 md:py-5 md:pl-6">
+                    <dt className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.18em] text-textmuted">
+                      <span className="flex w-6 h-6 shrink-0 items-center justify-center rounded-md border border-green-500/35 bg-green-500/10 text-green-500">
+                        <Recycle className="w-3.5 h-3.5" />
+                      </span>
                       Waste Exchanged
-                    </div>
-                    <div className="text-4xl font-extrabold text-slate-900 tracking-tight">18.7 T</div>
+                    </dt>
+                    <dd>
+                      <p className="mt-2.5 text-balance font-mono text-2xl font-semibold leading-[120%] tracking-tight text-green-500">
+                        18.7 T
+                      </p>
+                      <p className="mt-2.5 text-pretty text-[13px] leading-[165%] text-textmain/80">Total industrial waste successfully repurposed.</p>
+                    </dd>
                   </div>
+                </dl>
+                
+                <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
+                  <Link to="/create" className="group relative inline-flex shrink-0 items-center justify-center rounded-sm border border-transparent bg-accent text-primary text-sm font-medium whitespace-nowrap transition-all outline-none hover:bg-orange-500 h-10 gap-1.5 px-[14px]">
+                    <span className="relative z-10 inline-flex items-center gap-[inherit]">
+                      <span>List your waste</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </span>
+                  </Link>
                 </div>
               </div>
               
-              <div className="hidden lg:flex justify-center items-center relative animate-fade-in" style={{animationDelay: '0.2s'}}>
-                <div className="relative w-full max-w-[520px] aspect-square rounded-[2rem] overflow-hidden premium-shadow border border-white/40">
-                  <div className="absolute inset-0 bg-slate-900/10 mix-blend-multiply z-10"></div>
-                  <img src="https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&q=80&w=1000" alt="Industrial Sustainability" className="object-cover w-full h-full transform hover:scale-105 transition-transform duration-1000" />
-                  
-                  {/* Floating glass card overlay */}
-                  <div className="absolute bottom-8 left-8 right-8 glass rounded-2xl p-6 z-20 flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-bold text-slate-800 uppercase tracking-widest mb-1">Impact Generated</p>
-                      <p className="text-3xl font-extrabold text-accent">4,200 kg</p>
-                    </div>
-                    <div className="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center">
-                      <Leaf className="w-6 h-6 text-accent" />
-                    </div>
+              <div className="relative -mx-5 h-[350px] sm:h-[440px] lg:mx-0 lg:-mr-16 lg:h-[540px] xl:h-[580px] hidden md:block">
+                <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'linear-gradient(to right, #4b5563 1px, transparent 1px), linear-gradient(to bottom, #4b5563 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <div className="relative">
+                     <div className="absolute inset-0 bg-accent/20 blur-3xl rounded-full"></div>
+                     <Leaf className="w-32 h-32 text-accent/80 relative z-10 animate-pulse" />
                   </div>
+                  <p className="mt-8 font-mono text-[11px] tracking-[0.35em] text-textmuted">CIRCULAR ECONOMY</p>
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Marketplace Section */}
-        <section id="marketplace" className="py-24 relative">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
-              <div className="max-w-2xl">
-                <span className="text-accent font-bold tracking-widest uppercase text-xs mb-3 block">01 / Marketplace</span>
-                <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">Exchange Premium Materials.</h2>
-              </div>
-              
-              <div className="w-full md:w-[400px]">
-                <form onSubmit={handleSearch} className="flex items-center bg-white border border-slate-200 rounded-full shadow-sm hover:shadow-md focus-within:ring-2 focus-within:ring-accent/20 focus-within:border-accent overflow-hidden transition-all h-14">
-                  <div className="pl-5 text-slate-400">
-                    <Search className="w-5 h-5" />
-                  </div>
-                  <input 
-                    type="text" 
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search materials..." 
-                    className="w-full bg-transparent text-slate-900 font-medium px-4 py-2 outline-none placeholder:text-slate-400 placeholder:font-normal"
-                  />
-                  <button type="submit" className="bg-slate-900 text-white px-6 h-full font-semibold hover:bg-slate-800 transition-colors">
-                    Search
-                  </button>
-                </form>
-              </div>
+        <section id="marketplace" className="border-b border-gray-800">
+          <div className="box-border mx-auto w-[1300px] max-w-full px-5 lg:px-16 border-x border-gray-800 border-dashed py-14 md:py-20">
+            <div className="mx-auto max-w-2xl text-center">
+              <div className="font-mono text-sm font-medium uppercase tracking-wider text-accent">01 / Marketplace</div>
+              <h2 className="mt-3 text-balance text-4xl font-medium leading-[120%] tracking-tight md:text-5xl md:leading-[125%]">Recent Listings.</h2>
+              <p className="mt-6 text-pretty text-lg leading-relaxed text-textmuted">Explore the latest industrial materials available for exchange. Connect with sellers to negotiate and procure.</p>
+            </div>
+            <div className="mt-8 max-w-2xl mx-auto flex flex-col items-center">
+              <form onSubmit={handleSearch} className="w-full flex items-center bg-secondary/80 border border-gray-700 rounded-full overflow-hidden focus-within:border-accent transition-colors">
+                {/* Unified Search Input */}
+                <input 
+                  type="text" 
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search listings..." 
+                  className="w-full bg-transparent text-textmain px-4 py-3 outline-none placeholder:text-gray-500"
+                />
+                <button type="submit" className="bg-accent text-primary px-6 py-3 font-semibold hover:bg-orange-500 transition-colors">
+                  Search
+                </button>
+              </form>
             </div>
             
-            <div>
+            <div className="mt-12 md:mt-16 border-t border-gray-800 pt-12">
               {loading ? (
-                <div className="flex justify-center py-20">
-                  <RefreshCw className="w-10 h-10 animate-spin text-accent" />
+                <div className="flex justify-center py-12">
+                  <RefreshCw className="w-8 h-8 animate-spin text-accent" />
                 </div>
               ) : listings.length === 0 ? (
-                <div className="bg-white border border-slate-200 rounded-2xl p-16 text-center text-slate-500 premium-shadow">
-                  <Package className="w-16 h-16 mx-auto text-slate-300 mb-6" />
-                  <p className="text-xl font-bold text-slate-900 mb-2">No listings found</p>
-                  <p className="text-lg">Be the first to create one on the network.</p>
+                <div className="bg-secondary/40 border border-gray-800 rounded-xl p-8 text-center text-textmuted">
+                  No active listings found. Be the first to create one.
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {listings.map((listing, index) => (
-                    <div key={listing._id} className="bg-white border border-slate-200 rounded-2xl p-6 flex flex-col group transition-all duration-300 hover:premium-shadow hover:-translate-y-1 hover:border-accent/30 animate-fade-up" style={{animationDelay: `${index * 0.1}s`}}>
-                      <div className="flex justify-between items-start mb-6">
-                        <span className="text-xs font-bold uppercase tracking-widest text-accent bg-teal-50 px-3 py-1.5 rounded-full">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {listings.map(listing => (
+                    <div key={listing._id} className="rounded-xl border border-gray-800 bg-secondary/40 p-5 hover:border-accent transition-colors group flex flex-col">
+                      <div className="flex justify-between items-start mb-4">
+                        <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-textmuted border border-gray-800 px-2 py-1 rounded bg-secondary">
                           {listing.category || 'Uncategorized'}
                         </span>
-                        <span className="text-xl font-extrabold text-slate-900">
-                          ₹{listing.expected_price}<span className="text-sm font-semibold text-slate-400">/kg</span>
+                        <span className="font-mono text-lg font-semibold text-accent tracking-tight">
+                          ₹{listing.expected_price}/kg
                         </span>
                       </div>
-                      <h3 className="text-2xl font-bold text-slate-900 mb-4 group-hover:text-accent transition-colors leading-tight">{listing.title}</h3>
+                      <h3 className="text-xl font-medium tracking-tight mb-3 flex-grow">{listing.title}</h3>
                       
-                      <div className="mt-auto">
-                        <div className="flex items-center gap-4 bg-slate-50 rounded-xl p-4 mb-6 border border-slate-100">
-                          <div className="flex-1">
-                            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Quantity</p>
-                            <p className="text-sm font-semibold text-slate-900">{listing.quantity} {listing.quantity_unit} <span className="text-slate-400 font-normal">/ {listing.frequency}</span></p>
-                          </div>
-                          <div className="w-px h-8 bg-slate-200"></div>
-                          <div className="flex-1">
-                            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Location</p>
-                            <p className="text-sm font-semibold text-slate-900 truncate" title={listing.location}>{listing.location}</p>
-                          </div>
-                        </div>
-                        <Link to={`/listing/${listing._id}`} className="inline-flex items-center justify-between w-full text-slate-900 font-semibold group-hover:text-accent transition-colors">
-                          View full details
-                          <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center group-hover:bg-accent/10 transition-colors">
-                            <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-                          </div>
+                      <div className="border-t border-gray-800 pt-4 mt-auto">
+                        <p className="text-[13px] leading-[165%] text-textmuted mb-4 line-clamp-2">
+                          <strong className="text-textmain/80 font-medium">{listing.quantity} {listing.quantity_unit} / {listing.frequency}</strong><br/>
+                          Location: {listing.location}
+                        </p>
+                        <Link to={`/listing/${listing._id}`} className="inline-flex items-center gap-1.5 text-accent text-sm font-medium underline-offset-4 transition-colors hover:underline group-hover:gap-2">
+                          View details
+                          <ArrowRight className="w-4 h-4" />
                         </Link>
                       </div>
                     </div>
@@ -220,96 +219,88 @@ export default function Home() {
         </section>
 
         {/* Process Section */}
-        <section id="process" className="py-24 bg-white border-y border-slate-200/60 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-1/2 h-full bg-slate-50/50 -skew-x-12 translate-x-32 -z-10"></div>
-          
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-3xl mx-auto mb-20">
-              <span className="text-emerald-500 font-bold tracking-widest uppercase text-xs mb-3 block">02 / Architecture</span>
-              <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-6">Built for Scale.</h2>
-              <p className="text-slate-500 text-xl font-medium">A highly optimized three-step pipeline to monetize industrial waste with enterprise-grade reliability.</p>
+        <section id="process" className="border-b border-gray-800">
+          <div className="box-border mx-auto w-[1300px] max-w-full px-5 lg:px-16 border-x border-gray-800 border-dashed py-14 md:py-20">
+            <div className="mx-auto max-w-2xl text-center mb-12">
+              <div className="font-mono text-sm font-medium uppercase tracking-wider text-green-500">02 / The Process</div>
+              <h2 className="mt-3 text-balance text-4xl font-medium leading-[120%] tracking-tight md:text-5xl">How Circularity Works.</h2>
             </div>
-            
-            <div className="grid md:grid-cols-3 gap-12 relative">
-              <div className="hidden md:block absolute top-10 left-[18%] right-[18%] h-0.5 bg-gradient-to-r from-transparent via-slate-200 to-transparent"></div>
-              
-              <div className="relative text-center group">
-                <div className="w-20 h-20 mx-auto bg-white border border-slate-200 rounded-2xl flex items-center justify-center premium-shadow mb-8 relative z-10 transition-transform group-hover:-translate-y-2 group-hover:border-accent">
-                  <Box className="w-8 h-8 text-slate-900 group-hover:text-accent transition-colors" />
+            <div className="grid md:grid-cols-3 gap-8 mt-16">
+              <div className="relative group">
+                <div className="absolute -inset-1 rounded-lg bg-gradient-to-b from-gray-800 to-transparent opacity-25 group-hover:opacity-50 transition duration-500"></div>
+                <div className="relative p-6 bg-primary border border-gray-800 rounded-lg hover:-translate-y-1 transition-transform duration-300">
+                  <div className="w-12 h-12 bg-gray-800 rounded flex items-center justify-center mb-6 text-textmuted font-mono font-bold text-xl border border-gray-700">01</div>
+                  <h3 className="text-xl font-semibold mb-3">List your Byproducts</h3>
+                  <p className="text-textmuted text-sm leading-relaxed">Producers catalog their industrial waste, scrap, or surplus materials with detailed specifications and quantities.</p>
                 </div>
-                <h3 className="text-2xl font-bold text-slate-900 mb-4">1. Catalog Assets</h3>
-                <p className="text-slate-500 font-medium leading-relaxed">Enterprises securely log surplus materials into our structured database with exact specifications.</p>
               </div>
-              
-              <div className="relative text-center group">
-                <div className="w-20 h-20 mx-auto bg-white border border-slate-200 rounded-2xl flex items-center justify-center premium-shadow mb-8 relative z-10 transition-transform group-hover:-translate-y-2 group-hover:border-accent">
-                  <RefreshCw className="w-8 h-8 text-slate-900 group-hover:text-accent transition-colors" />
+              <div className="relative group">
+                <div className="absolute -inset-1 rounded-lg bg-gradient-to-b from-accent to-transparent opacity-10 group-hover:opacity-30 transition duration-500 delay-100"></div>
+                <div className="relative p-6 bg-primary border border-gray-800 rounded-lg hover:-translate-y-1 transition-transform duration-300 delay-100">
+                  <div className="w-12 h-12 bg-accent/10 rounded flex items-center justify-center mb-6 text-accent font-mono font-bold text-xl border border-accent/20">02</div>
+                  <h3 className="text-xl font-semibold mb-3">Get AI Matched</h3>
+                  <p className="text-textmuted text-sm leading-relaxed">Our system automatically identifies local recyclers and consumers who need your exact material specifications.</p>
                 </div>
-                <h3 className="text-2xl font-bold text-slate-900 mb-4">2. Algorithmic Match</h3>
-                <p className="text-slate-500 font-medium leading-relaxed">Our routing engine identifies optimal industrial buyers based on geography and material requirements.</p>
               </div>
-              
-              <div className="relative text-center group">
-                <div className="w-20 h-20 mx-auto bg-white border border-slate-200 rounded-2xl flex items-center justify-center premium-shadow mb-8 relative z-10 transition-transform group-hover:-translate-y-2 group-hover:border-emerald-500">
-                  <ShieldCheck className="w-8 h-8 text-slate-900 group-hover:text-emerald-500 transition-colors" />
+              <div className="relative group">
+                <div className="absolute -inset-1 rounded-lg bg-gradient-to-b from-green-500 to-transparent opacity-10 group-hover:opacity-30 transition duration-500 delay-200"></div>
+                <div className="relative p-6 bg-primary border border-gray-800 rounded-lg hover:-translate-y-1 transition-transform duration-300 delay-200">
+                  <div className="w-12 h-12 bg-green-500/10 rounded flex items-center justify-center mb-6 text-green-500 font-mono font-bold text-xl border border-green-500/20">03</div>
+                  <h3 className="text-xl font-semibold mb-3">Exchange & Report</h3>
+                  <p className="text-textmuted text-sm leading-relaxed">Complete the transaction securely, divert waste from landfills, and download automated sustainability reports.</p>
                 </div>
-                <h3 className="text-2xl font-bold text-slate-900 mb-4">3. Secure Exchange</h3>
-                <p className="text-slate-500 font-medium leading-relaxed">Execute transactions with end-to-end compliance tracking and automated ESG reporting.</p>
               </div>
             </div>
           </div>
         </section>
 
         {/* Benefits Section */}
-        <section id="benefits" className="py-24">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-20">
-              <div className="max-w-2xl">
-                <span className="text-accent font-bold tracking-widest uppercase text-xs mb-3 block">03 / Value Proposition</span>
-                <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">Enterprise Benefits.</h2>
+        <section id="benefits" className="border-b border-gray-800 bg-[radial-gradient(ellipse_80%_80%_at_50%_120%,rgba(16,185,129,0.05)_0%,transparent_100%)]">
+          <div className="box-border mx-auto w-[1300px] max-w-full px-5 lg:px-16 border-x border-gray-800 border-dashed py-14 md:py-20">
+            <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between lg:gap-12">
+              <div>
+                <div className="font-mono text-sm font-medium uppercase tracking-wider text-accent mb-3">03 / Benefits</div>
+                <h3 className="text-balance text-3xl font-medium leading-[130%] tracking-tight md:text-4xl">What you carry home.</h3>
               </div>
-              <p className="text-slate-500 text-xl font-medium max-w-md lg:text-right">Measurable impact at every stage of the circular lifecycle.</p>
+              <p className="text-pretty text-textmuted lg:max-w-sm lg:text-right">Value delivered at every step of the circular economy journey.</p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="bg-white border border-slate-200 rounded-3xl p-10 flex gap-6 hover:premium-shadow transition-shadow">
-                <div className="w-14 h-14 shrink-0 rounded-2xl bg-teal-50 border border-teal-100 flex items-center justify-center">
-                  <Leaf className="w-7 h-7 text-accent" />
+            <div className="mt-12 grid grid-cols-2 gap-x-5 gap-y-12 md:mt-16 md:grid-cols-4">
+              <div className="group flex flex-col items-center gap-4">
+                <div className="flex w-full max-w-38 justify-center">
+                  <div className="relative flex h-24 w-full select-none flex-col items-center justify-center gap-1 border-2 px-3 text-center transition-all duration-300 ease-out group-hover:-rotate-3 group-hover:scale-105 rounded-xl border-gray-700 text-gray-500 group-hover:border-accent group-hover:text-accent group-hover:shadow-[0_0_15px_rgba(245,158,11,0.2)]">
+                    <span className="font-mono text-[11px] font-medium uppercase tracking-[0.16em]">Zero Waste</span>
+                    <span className="font-mono text-[9px] uppercase tracking-[0.22em] opacity-60">Certification</span>
+                  </div>
                 </div>
-                <div>
-                  <h4 className="text-2xl font-bold text-slate-900 mb-3">Zero Waste Certification</h4>
-                  <p className="text-slate-500 font-medium leading-relaxed">Generate official documentation required for your corporate ESG compliance and sustainability audits.</p>
-                </div>
+                <p className="max-w-40 text-pretty text-center text-xs leading-snug text-textmuted">Official documentation for your ESG compliance.</p>
               </div>
-              
-              <div className="bg-white border border-slate-200 rounded-3xl p-10 flex gap-6 hover:premium-shadow transition-shadow">
-                <div className="w-14 h-14 shrink-0 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center">
-                  <TrendingUp className="w-7 h-7 text-emerald-600" />
+              <div className="group flex flex-col items-center gap-4">
+                <div className="flex w-full max-w-38 justify-center">
+                  <div className="relative flex h-24 w-full select-none flex-col items-center justify-center gap-1 border-2 px-3 text-center transition-all duration-300 ease-out group-hover:rotate-6 group-hover:scale-105 rounded-full border-gray-700 text-gray-500 group-hover:border-green-500 group-hover:text-green-500 group-hover:shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+                    <span className="font-mono text-[11px] font-medium uppercase tracking-[0.16em]">New Revenue</span>
+                    <span className="font-mono text-[9px] uppercase tracking-[0.22em] opacity-60">Streams</span>
+                  </div>
                 </div>
-                <div>
-                  <h4 className="text-2xl font-bold text-slate-900 mb-3">New Revenue Streams</h4>
-                  <p className="text-slate-500 font-medium leading-relaxed">Transform expensive disposal liabilities into profitable assets by selling directly to vetted consumers.</p>
-                </div>
+                <p className="max-w-40 text-pretty text-center text-xs leading-snug text-textmuted">Monetize byproducts instead of paying disposal fees.</p>
               </div>
-              
-              <div className="bg-white border border-slate-200 rounded-3xl p-10 flex gap-6 hover:premium-shadow transition-shadow">
-                <div className="w-14 h-14 shrink-0 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center">
-                  <Box className="w-7 h-7 text-blue-600" />
+              <div className="group flex flex-col items-center gap-4">
+                <div className="flex w-full max-w-38 justify-center">
+                  <div className="relative flex h-24 w-full select-none flex-col items-center justify-center gap-1 border-2 px-3 text-center transition-all duration-300 ease-out group-hover:-rotate-2 group-hover:scale-105 rounded-xl border-gray-700 text-gray-500 group-hover:border-blue-400 group-hover:text-blue-400 group-hover:shadow-[0_0_15px_rgba(96,165,250,0.2)]">
+                    <span className="font-mono text-[11px] font-medium uppercase tracking-[0.16em]">Network</span>
+                    <span className="font-mono text-[9px] uppercase tracking-[0.22em] opacity-60">Connections</span>
+                  </div>
                 </div>
-                <div>
-                  <h4 className="text-2xl font-bold text-slate-900 mb-3">Verified Network</h4>
-                  <p className="text-slate-500 font-medium leading-relaxed">Connect exclusively with verified industrial partners, ensuring reliable and professional transactions.</p>
-                </div>
+                <p className="max-w-40 text-pretty text-center text-xs leading-snug text-textmuted">Connect with verified industrial partners locally.</p>
               </div>
-              
-              <div className="bg-white border border-slate-200 rounded-3xl p-10 flex gap-6 hover:premium-shadow transition-shadow">
-                <div className="w-14 h-14 shrink-0 rounded-2xl bg-purple-50 border border-purple-100 flex items-center justify-center">
-                  <RefreshCw className="w-7 h-7 text-purple-600" />
+              <div className="group flex flex-col items-center gap-4">
+                <div className="flex w-full max-w-38 justify-center">
+                  <div className="relative flex h-24 w-full select-none flex-col items-center justify-center gap-1 border-2 px-3 text-center transition-all duration-300 ease-out group-hover:rotate-2 group-hover:scale-105 rounded-[2rem] border-gray-700 text-gray-500 group-hover:border-purple-400 group-hover:text-purple-400 group-hover:shadow-[0_0_15px_rgba(192,132,252,0.2)]">
+                    <span className="font-mono text-[11px] font-medium uppercase tracking-[0.16em]">Carbon Offset</span>
+                    <span className="font-mono text-[9px] uppercase tracking-[0.22em] opacity-60">Tracking</span>
+                  </div>
                 </div>
-                <div>
-                  <h4 className="text-2xl font-bold text-slate-900 mb-3">Carbon Tracking</h4>
-                  <p className="text-slate-500 font-medium leading-relaxed">Automatically calculate, monitor, and report the CO2 emissions saved through your circular exchanges.</p>
-                </div>
+                <p className="max-w-40 text-pretty text-center text-xs leading-snug text-textmuted">Automatically calculate emissions saved.</p>
               </div>
             </div>
           </div>
