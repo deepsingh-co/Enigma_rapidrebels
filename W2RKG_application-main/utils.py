@@ -1,0 +1,133 @@
+import json, io, networkx as nx, pandas as pd, streamlit as st
+import numpy as np
+
+def load_kg_file(kg_file):
+    if kg_file:
+        try:
+            if isinstance(kg_file, str):
+                with open(kg_file, 'r', encoding='utf-8') as f:
+                    return json.load(f)
+            else:  # Assume it's a file-like object (e.g., UploadedFile)
+                # Reset pointer in case it was read before
+                kg_file.seek(0)
+                return json.load(io.TextIOWrapper(kg_file, encoding='utf-8'))
+        except Exception as e:
+            st.error(f"Error loading KG JSON {kg_file}: {e}")
+    return []
+
+def load_profiles_file(prof_file):
+    if prof_file:
+        try:
+            if isinstance(prof_file, str):
+                with open(prof_file, 'r', encoding='utf-8') as f:
+                    return json.load(f)
+            else:  # Assume it's a file-like object (e.g., UploadedFile)
+                prof_file.seek(0)
+                return json.load(io.TextIOWrapper(prof_file, encoding='utf-8'))
+        except Exception as e:
+            st.error(f"Error loading company profile JSON {prof_file}: {e}")
+    return {}
+
+def load_case_file(case_file):
+    '''Maestri_case{}.csv file'''
+    try:
+        return pd.read_csv(case_file)
+    except Exception as e:
+        st.error(f"Error loading case file {case_file}: {e}")
+    return pd.DataFrame()
+
+def build_W2R_graph(kg_triples):
+    G = nx.MultiDiGraph()
+
+    # add waste-to-resource graphs
+    for entry in kg_triples:
+        # Each entry: {waste, transforming_process, transformed_resource, reference}
+        waste = entry.get('waste')
+        resource = entry.get('transformed_resource')
+        process = entry.get('transforming_process', '')
+        reference = entry.get('reference', '')
+        if waste and resource:
+            G.add_node(waste, type='waste')
+            G.add_node(resource, type='resource')
+            G.add_edge(
+                waste, resource, 
+                process=process, reference=reference
+            )
+    return G
+
+
+def nx_to_agraph(Gsub, highlight_node=None):
+    """
+    Convert NetworkX graph to format compatible with st-link-analysis
+    Returns nodes and edges data for st-link-analysis component
+    """
+    nodes_data = []
+    edges_data = []
+    
+    # Convert nodes
+    for n in Gsub.nodes():
+        node_label = "query_company" if n == highlight_node else "company"
+        node_data = {
+            "id": n,
+            "label": node_label
+        }
+        # Add node attributes if they exist
+        if Gsub.nodes[n]:
+            node_data['business'] = Gsub.nodes[n].get('business', 'n.a.')
+            node_data['waste'] = Gsub.nodes[n].get('waste', 'n.a.')
+            node_data['resource'] = Gsub.nodes[n].get('resource', 'n.a.')
+        nodes_data.append({"data": node_data})
+    
+    # Convert edges - direct connections without mid_nodes
+    for u, v, k, d in Gsub.edges(data=True, keys=True):
+        edge_id = f"{u}-{v}-{k}"
+        edge_data = {
+            "id": edge_id,
+            "label": "collaboration",
+            "source": u,
+            "target": v,
+        }
+        # add edge attributes
+        edge_data['waste'] = d.get('waste', 'n.a.')
+        edge_data['resource'] = d.get('resource', 'n.a.')
+        edge_data['process'] = d.get('process', 'n.a.')
+        edge_data['reference'] = d.get('reference', 'n.a.')
+        edges_data.append({"data": edge_data})
+    
+    return nodes_data, edges_data
+
+def remove_isolated_nodes(G):
+    '''
+    Remove isolated nodes from the graph
+    '''
+    G.remove_nodes_from(list(nx.isolates(G)))
+    return G
+
+
+def save_list_to_text(alist, file_path):
+    with open(file_path, 'w', encoding='utf-8') as f:
+        for item in alist:
+            f.write(f"{item}\n")
+
+def read_list_from_text(file_path):
+    with open(file_path, 'r', encoding='utf-8') as f:
+        return [line.strip() for line in f.readlines()]
+
+
+def convert_str_to_list(text, sep=';'):
+    '''
+    Convert a string to a list based on separator
+    If no separator found, return a single-item list with the string
+    '''
+    if not text or text == 'n.a.' or text == "" or text == " " or text == "nan" or text == "null":
+        return []
+    
+    if sep in text:
+        return [item.strip() for item in text.split(sep) if item.strip()]
+    
+    return [text.strip()]
+
+
+
+
+
